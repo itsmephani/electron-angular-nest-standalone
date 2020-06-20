@@ -2,12 +2,13 @@ const electron = require("electron"),
   app = electron.app,
   BrowserWindow = electron.BrowserWindow;
 const path = require("path");
+const logger = require("./logger");
 
 let mainWindow;
 let nodeProcess;
 
 function createWindow() {
-  console.log("Starting app");
+  logger.log("Starting app");
   mainWindow = new BrowserWindow({
     autoHideMenuBar: true,
     width: 1200,
@@ -17,14 +18,14 @@ function createWindow() {
     },
   });
   mainWindow.loadFile(`dist/ledger/index.html`);
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.on("close", () => {
-    console.log("close");
+    // logger.log("close");
   });
 
   mainWindow.on("closed", () => {
-    console.log("closed");
+    logger.log("closed");
     mainWindow = null;
     nodeProcess.kill("SIGINT");
     app.quit();
@@ -32,7 +33,7 @@ function createWindow() {
 }
 
 async function startServer() {
-  console.log("Starting server");
+  // logger.log("Starting server");
   const { spawn } = require("child_process");
   // For electron-packager change cwd in spawn to app.getAppPath() and
   // uncomment the app require below
@@ -48,7 +49,7 @@ async function startServer() {
     );
 
     nodeProcess.stdout.on("data", function (data) {
-      console.log("Server:: " + data);
+      logger.log("Server:: " + data);
     });
 
     nodeProcess.on("message", (message) => {
@@ -58,27 +59,27 @@ async function startServer() {
       }
     });
   } catch (ex) {
-    console.log(ex);
+    logger.log(ex);
   }
 }
 
 app.on("ready", async function () {
-  console.log("ready");
+  // logger.log("ready");
   startServer();
 });
 
 app.on("browser-window-created", function (e, window) {
-  console.log("browser-window-created");
+  // logger.log("browser-window-created");
   window.setMenu(null);
 });
 
 app.on("window-all-closed", function () {
-  console.log("window-all-close");
+  // logger.log("window-all-close");
   if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
 app.on("activate", function () {
-  console.log("activate");
+  // logger.log("activate");
 });
