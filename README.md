@@ -4,8 +4,8 @@ Electron app with Angular as Frontend, Nest as server and SQLite as DB.
 This will start local node server on startup of app.
 
 ## Running locally
-npm i
-npm run electron
+`npm i`
+`npm run electron`
 
 ## Build
 Frontend:
